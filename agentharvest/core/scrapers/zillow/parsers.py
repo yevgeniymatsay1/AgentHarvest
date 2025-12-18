@@ -129,9 +129,10 @@ def parse_agent_card(card: Dict) -> Optional[Agent]:
 
         for item in profile_data_raw:
             label = item.get('label', '').lower()
-            data_value = item.get('data', '')
+            # Handle None values - convert to empty string for regex operations
+            data_value = item.get('data') or ''
 
-            if 'price range' in label:
+            if 'price range' in label and data_value:
                 price_range = data_value
                 # Parse min/max from "$78K - $2.4M" format
                 prices = re.findall(r'\$[\d.]+[KMB]?', data_value)
@@ -139,13 +140,13 @@ def parse_agent_card(card: Dict) -> Optional[Agent]:
                     price_range_min = prices[0]
                     price_range_max = prices[1]
 
-            elif 'sales last 12 months' in label or 'last 12 months' in label:
+            elif ('sales last 12 months' in label or 'last 12 months' in label) and data_value:
                 # Extract number
                 sales_match = re.sub(r'[^\d]', '', data_value)
                 if sales_match:
                     sales_last_12_months = int(sales_match)
 
-            elif 'sales in' in label or 'total sales' in label:
+            elif ('sales in' in label or 'total sales' in label) and data_value:
                 # Extract number
                 sales_match = re.sub(r'[^\d]', '', data_value)
                 if sales_match:
