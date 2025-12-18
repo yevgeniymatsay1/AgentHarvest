@@ -1,0 +1,259 @@
+{
+  "__typename": "AgentDirectoryFinderPageOutput",
+  "searchResults": {
+    "__typename": "AgentDirectoryFinderSearchResults",
+    "currentPage": 1,
+    "description": "With over a million agents from all the top brokerages, a local agent knows your market and can guide you through the process from start to finish",
+    "loadMoreResultsButtonText": "View more",
+    "results": {
+      "__typename": "AgentDirectoryFinderSearchSuccess",
+      "emptyView": {
+        "__typename": "AgentDirectoryFinderSearchError",
+        "buttonText": "Reset all filters",
+        "imageUrl": "https://delivery.digitallibrary.zillowgroup.com/public/professional-paperwork-light_svg_Original.svg",
+        "longDescription": "We couldn't find anyone matching your search. Please adjust your filters and try again.",
+        "longTitle": "Sorry, we couldn't find anyone",
+        "shortDescription": "Try a new search.",
+        "shortTitle": "No agents found"
+      },
+      "showcaseDisplay": null,
+      "resultsCards": [
+        {
+          "__typename": "AgentDirectoryFinderProfileResultsCard",
+          "cardActionLink": "https://www.zillow.com/profile/REMAX-EDGE",
+          "cardTitle": "REMAX EDGE",
+          "logoUrl": null,
+          "encodedZuid": "X1-ZUytouqbzgwsnd_75224",
+          "imageUrl": "https://photos.zillowstatic.com/fp/62017aba88a8db036ebe1732f164d07f-h_l.jpg",
+          "isTopAgent": true,
+          "profileData": [
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "$105K - $8M",
+              "label": "team price range"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "866",
+              "label": "team sales last 12 months"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "5054",
+              "label": "team sales in New York"
+            }
+          ],
+          "reviewInformation": {
+            "__typename": "AgentDirectoryProfileReviewData",
+            "noReviewsText": "No reviews",
+            "reviewAverage": 5,
+            "reviewAverageText": "5.0",
+            "reviewCountText": "(2531)"
+          },
+          "secondaryCardTitle": "RE/MAX EDGE",
+          "tags": [
+            {
+              "__typename": "AgentDirectoryFinderTag",
+              "tagType": "WARNING",
+              "text": "TEAM"
+            }
+          ]
+        },
+        {
+          "__typename": "AgentDirectoryFinderProfileResultsCard",
+          "cardActionLink": "https://www.zillow.com/profile/Teresa-Stephenson",
+          "cardTitle": "Teresa Stephenson",
+          "logoUrl": null,
+          "encodedZuid": "X1-ZU10bs62tnoyy2x_5dugv",
+          "imageUrl": "https://photos.zillowstatic.com/fp/0e3b3c04e0029fa08d14190b9b6e8265-h_l.jpg",
+          "isTopAgent": true,
+          "profileData": [
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "$99K - $5.3M",
+              "label": "team price range"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "76",
+              "label": "team sales last 12 months"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "608",
+              "label": "team sales in New York"
+            }
+          ],
+          "reviewInformation": {
+            "__typename": "AgentDirectoryProfileReviewData",
+            "noReviewsText": "No reviews",
+            "reviewAverage": 5,
+            "reviewAverageText": "5.0",
+            "reviewCountText": "(1532)"
+          },
+          "secondaryCardTitle": "Platinum Properties LLC.",
+          "tags": [
+            {
+              "__typename": "AgentDirectoryFinderTag",
+              "tagType": "WARNING",
+              "text": "TEAM"
+            }
+          ]
+        },
+        {
+          "__typename": "AgentDirectoryFinderPLCCard",
+          "cardActionLink": "https://www.zillow.com/ods/submit_lead?request_type=ActFastV2&utm_campaign=agent_finder_cta&zipcode=11368",
+          "cardActionText": "Connect with a local agent",
+          "cardDescription": "We'll pair you with a Zillow Premier Agent who has the inside scoop on your market.",
+          "cardIcon": "PHONE",
+          "cardTitle": "Get help finding an agent"
+        },
+        {
+          "__typename": "AgentDirectoryFinderProfileResultsCard",
+          "cardActionLink": "https://www.zillow.com/profile/Howard_HannaNYC",
+          "cardTitle": "Howard Hanna NYC",
+          "logoUrl": null,
+          "encodedZuid": "X1-ZUy7nofrm1xiix_8s1xy",
+          "imageUrl": "https://photos.zillowstatic.com/fp/353dc73023e6fbfa0b2ec69515b1d207-h_l.jpg",
+          "isTopAgent": true,
+          "profileData": [
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "$150K - $8.6M",
+              "label": "team price range"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "135",
+              "label": "team sales last 12 months"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "1850",
+              "label": "team sales in New York"
+            }
+          ],
+          "reviewInformation": {
+            "__typename": "AgentDirectoryProfileReviewData",
+            "noReviewsText": "No reviews",
+            "reviewAverage": 5,
+            "reviewAverageText": "5.0",
+            "reviewCountText": "(1028)"
+          },
+          "secondaryCardTitle": "Howard Hanna NYC",
+          "tags": [
+            {
+              "__typename": "AgentDirectoryFinderTag",
+              "tagType": "WARNING",
+              "text": "TEAM"
+            }
+          ]
+        },
+        {
+          "__typename": "AgentDirectoryFinderProfileResultsCard",
+          "cardActionLink": "https://www.zillow.com/profile/Matthew-Bizzarro",
+          "cardTitle": "Matthew Bizzarro and The Bizzarro Agency",
+          "logoUrl": null,
+          "encodedZuid": "X1-ZUxs6j84n4ak95_3mmvm",
+          "imageUrl": "https://photos.zillowstatic.com/fp/e65c23ddf5b4732ca84855785336f93c-h_l.jpg",
+          "isTopAgent": true,
+          "profileData": [
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "$125K - $4.7M",
+              "label": "team price range"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "120",
+              "label": "team sales last 12 months"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "1020",
+              "label": "team sales in New York"
+            }
+          ],
+          "reviewInformation": {
+            "__typename": "AgentDirectoryProfileReviewData",
+            "noReviewsText": "No reviews",
+            "reviewAverage": 5,
+            "reviewAverageText": "5.0",
+            "reviewCountText": "(887)"
+          },
+          "secondaryCardTitle": "The Bizzarro Agency",
+          "tags": [
+            {
+              "__typename": "AgentDirectoryFinderTag",
+              "tagType": "WARNING",
+              "text": "TEAM"
+            }
+          ]
+        },
+        {
+          "__typename": "AgentDirectoryFinderProfileResultsCard",
+          "cardActionLink": "https://www.zillow.com/profile/Vincent-Koo",
+          "cardTitle": "Vincent Koo",
+          "logoUrl": null,
+          "encodedZuid": "X1-ZUz2twqkseaknd_7kibb",
+          "imageUrl": "https://photos.zillowstatic.com/fp/99b974bb246750e0561b6dca49442202-h_l.jpg",
+          "isTopAgent": false,
+          "profileData": [
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "$140K - $3.2M",
+              "label": "team price range"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "71",
+              "label": "team sales last 12 months"
+            },
+            {
+              "__typename": "AgentDirectoryFinderProfileCardData",
+              "data": "2879",
+              "label": "team sales in New York"
+            }
+          ],
+          "reviewInformation": {
+            "__typename": "AgentDirectoryProfileReviewData",
+            "noReviewsText": "No reviews",
+            "reviewAverage": 4.9,
+            "reviewAverageText": "4.9",
+            "reviewCountText": "(749)"
+          },
+          "secondaryCardTitle": "eXp Realty",
+          "tags": [
+            {
+              "__typename": "AgentDirectoryFinderTag",
+              "tagType": "WARNING",
+              "text": "TEAM"
+            }
+          ]
+        }
+      ]
+    },
+    "regionId": "6181",
+    "resultsFound": 68944,
+    "resultsFoundLabel": "agents found",
+    "title": "Real Estate Agents in",
+    "titleLocation": "New York, NY",
+    "seoLocation": "New York, NY",
+    "urlLocation": "New York NY"
+  },
+  "searchBar": {
+    "__typename": "AgentDirectoryFinderSearchBar",
+    "locationIcon": "LOCATION",
+    "locationPlaceholder": "City, neighborhood, or ZIP code",
+    "nameIcon": "NAME",
+    "namePlaceholder": "Agent name",
+    "searchButton": {
+      "__typename": "AgentDirectoryFinderSearchButton",
+      "searchButtonIcon": "SEARCH",
+      "searchButtonLabel": "Find agent"
+    },
+    "searchedLocationText": "New York, NY",
+    "searchedNameText": null,
+    "title": "Find a real estate agent"
+  }
+}

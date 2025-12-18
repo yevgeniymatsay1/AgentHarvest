@@ -1,0 +1,45 @@
+# Python
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+**/dist/
+**/.pytest_cache/
+*.egg-info/
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test files and outputs
+test_*.py
+test_*.csv
+*.csv
+*.xlsx
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# Claude Code plans
+.claude/

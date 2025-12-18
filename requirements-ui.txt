@@ -1,0 +1,5 @@
+# Requirements for AgentHarvest Web UI
+streamlit>=1.28.0
+pandas>=2.0.0
+pydantic>=2.0.0
+curl_cffi>=0.6.0
