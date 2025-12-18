@@ -95,10 +95,10 @@ class ZillowScraper:
                     print(f"\n✅ Fetched all available agents ({total_available})")
                     break
 
-                # Delay before next page (shorter than profile fetching)
-                # Use 3-8 seconds between page requests to avoid detection
+                # Delay before next page (safer timing to avoid detection)
+                # Use 10-20 seconds between page requests - looks more human
                 if page < max_pages and len(all_agents) < self.search_input.limit:
-                    delay = random.uniform(3, 8)
+                    delay = random.uniform(10, 20)
                     print(f"\n⏱️  Waiting {delay:.1f}s before next page...")
                     time.sleep(delay)
 

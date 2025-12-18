@@ -117,6 +117,7 @@ def parse_agent_card(card: Dict) -> Optional[Agent]:
         profile_data_list = [
             ProfileData(label=item['label'], data=item['data'])
             for item in profile_data_raw
+            if item.get('data') is not None  # Skip items with None data
         ]
 
         # Extract specific fields from profile data

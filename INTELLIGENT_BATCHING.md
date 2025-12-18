@@ -25,7 +25,7 @@
 The system automatically fetches multiple pages of search results:
 - Each page contains ~15 agents
 - Continues fetching pages until reaching your requested limit
-- Random delays (3-8 seconds) between page requests
+- Random delays (10-20 seconds) between page requests - looks like human browsing
 - Example: Request 100 agents → fetches ~7 pages automatically
 
 ### Phase 1: Random Delays Between Requests
