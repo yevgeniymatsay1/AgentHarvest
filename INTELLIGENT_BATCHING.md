@@ -21,6 +21,13 @@
 
 ## How It Works
 
+### Phase 0: Automatic Pagination
+The system automatically fetches multiple pages of search results:
+- Each page contains ~15 agents
+- Continues fetching pages until reaching your requested limit
+- Random delays (3-8 seconds) between page requests
+- Example: Request 100 agents → fetches ~7 pages automatically
+
 ### Phase 1: Random Delays Between Requests
 Every single profile request has a **completely random delay**:
 - Minimum: 15 seconds
@@ -283,6 +290,7 @@ BREAK_MAX = 20  # Maximum minutes between batches
 ## Summary
 
 The intelligent batching system:
+- **Automatic pagination** - fetches multiple pages until reaching your limit
 - **Completely automatic** - no user configuration
 - **Production safe** - runs 24/7 without blocks
 - **Unlimited capacity** - fetch 500+ agents safely

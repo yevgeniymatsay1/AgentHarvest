@@ -5,7 +5,7 @@ Zillow Agent Scraper - Main implementation
 import time
 import random
 from datetime import datetime
-from typing import List
+from typing import List, Tuple, Dict
 from ..models import Agent, SearchInput
 from .browser import HTTPClient
 from .queries import build_agent_search_url
@@ -62,11 +62,49 @@ class ZillowScraper:
                 proxy=self.search_input.proxy
             )
 
-            # Fetch initial page
-            agents = self._fetch_agents_page()
-            all_agents.extend(agents)
+            # Pagination: Keep fetching pages until we have enough agents
+            page = 1
+            max_pages = 100  # Safety limit to prevent infinite loops
 
-            print(f"\n📊 Total agents collected: {len(all_agents)}")
+            print(f"\n🔄 Pagination enabled - fetching up to {self.search_input.limit} agents")
+            print(f"   Will fetch multiple pages as needed\n")
+
+            while len(all_agents) < self.search_input.limit and page <= max_pages:
+                print(f"\n{'='*60}")
+                print(f"📄 FETCHING PAGE {page}")
+                print(f"{'='*60}")
+
+                # Fetch agents from this page
+                agents, metadata = self._fetch_agents_page(page)
+
+                if not agents:
+                    print(f"\n⚠️  No agents found on page {page}. Stopping pagination.")
+                    break
+
+                all_agents.extend(agents)
+                print(f"\n📊 Progress: {len(all_agents)} agents collected so far")
+
+                # Check if we have enough agents
+                if len(all_agents) >= self.search_input.limit:
+                    print(f"✅ Reached target of {self.search_input.limit} agents!")
+                    break
+
+                # Check if there are more pages available
+                total_available = metadata.get('total_results', 0)
+                if len(all_agents) >= total_available:
+                    print(f"\n✅ Fetched all available agents ({total_available})")
+                    break
+
+                # Delay before next page (shorter than profile fetching)
+                # Use 3-8 seconds between page requests to avoid detection
+                if page < max_pages and len(all_agents) < self.search_input.limit:
+                    delay = random.uniform(3, 8)
+                    print(f"\n⏱️  Waiting {delay:.1f}s before next page...")
+                    time.sleep(delay)
+
+                page += 1
+
+            print(f"\n📊 Total agents collected from {page} page(s): {len(all_agents)}")
 
             # If agent_type filter is specified, we need to fetch profiles first
             # because agent_type is only available from profile pages
@@ -139,15 +177,18 @@ class ZillowScraper:
             if self.client:
                 self.client.close()
 
-    def _fetch_agents_page(self) -> List[Agent]:
+    def _fetch_agents_page(self, page: int = 1) -> Tuple[List[Agent], Dict]:
         """
         Fetch agents from a single page
 
+        Args:
+            page: Page number to fetch (default: 1)
+
         Returns:
-            List of Agent objects from page
+            Tuple of (agents list, metadata dict)
         """
-        # Build URL
-        url = build_agent_search_url(self.search_input)
+        # Build URL with page number
+        url = build_agent_search_url(self.search_input, page)
 
         print(f"\n🔍 Location: {self.search_input.get_location_slug()}")
         print(f"🌐 URL: {url}")
@@ -160,20 +201,22 @@ class ZillowScraper:
         agents = parse_agents_from_html(html)
 
         # Get metadata
+        metadata = {}
         try:
             next_data = extract_next_data(html)
             metadata = get_search_metadata(next_data)
 
-            print(f"\n📈 Search Results:")
+            print(f"\n📈 Page {page} Results:")
             print(f"   Total available: {metadata['total_results']:,}")
-            print(f"   Loaded on page: {metadata['results_on_page']}")
+            print(f"   Loaded on this page: {metadata['results_on_page']}")
             print(f"   Location: {metadata['location']}")
-        except:
-            pass
+        except Exception as e:
+            print(f"⚠️  Could not extract metadata: {e}")
+            metadata = {'total_results': 0, 'current_page': page, 'results_on_page': len(agents)}
 
-        print(f"\n✅ Parsed {len(agents)} agents from page")
+        print(f"\n✅ Parsed {len(agents)} agents from page {page}")
 
-        return agents
+        return agents, metadata
 
     def _fetch_all_profiles(self, agents: List[Agent]) -> List[Agent]:
         """
