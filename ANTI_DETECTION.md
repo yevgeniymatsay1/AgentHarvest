@@ -294,7 +294,7 @@ Already implemented! (From previous work)
 ### Features
 - **Random delays**: 15-60 seconds (no pattern)
 - **Random batch sizes**: 5-15 agents (unpredictable)
-- **Random breaks**: 20-40 minutes (human-like pauses)
+- **Random breaks**: 10-20 minutes (human-like pauses)
 
 ---
 
@@ -348,7 +348,7 @@ Already implemented! (From previous work)
      │
      └─ Random delay (15-60s)
           ↓
-          Every 5-15 agents: Random break (20-40 min)
+          Every 5-15 agents: Random break (10-20 min)
 ```
 
 ---

@@ -38,6 +38,8 @@ def scrape_agent(
     # Technical
     proxy: Optional[str] = None,
     timeout: int = 30,
+    # Progress tracking
+    progress_callback: Optional[callable] = None,  # Callback for real-time progress updates
 ) -> pd.DataFrame:
     """
     Scrape real estate agents from Zillow.com
@@ -156,6 +158,7 @@ def scrape_agent(
         fetch_profiles=fetch_profiles,
         proxy=proxy,
         timeout=timeout,
+        progress_callback=progress_callback,
         return_type=ReturnType.pandas,
     )
 

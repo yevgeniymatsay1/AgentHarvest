@@ -206,8 +206,8 @@ class ZillowScraper:
         DELAY_MAX = 60  # Maximum seconds between requests
         BATCH_MIN = 5   # Minimum agents per batch
         BATCH_MAX = 15  # Maximum agents per batch
-        BREAK_MIN = 20  # Minimum minutes between batches
-        BREAK_MAX = 40  # Maximum minutes between batches
+        BREAK_MIN = 10  # Minimum minutes between batches (reduced from 20)
+        BREAK_MAX = 20  # Maximum minutes between batches (reduced from 40)
 
         print(f"\n🤖 SMART BATCH PROCESSING (Anti-Detection)")
         print(f"   🎲 Randomized order: Yes (not sequential)")
@@ -225,6 +225,14 @@ class ZillowScraper:
         print(f"   ⏱️  Estimated time: {estimated_minutes:.0f} minutes ({estimated_minutes/60:.1f} hours)")
         print()
 
+        # Send initial progress
+        if self.search_input.progress_callback:
+            self.search_input.progress_callback({
+                'stage': 'profile_fetch_start',
+                'total': total,
+                'estimated_minutes': estimated_minutes
+            })
+
         i = 0
         batch_num = 1
 
@@ -240,6 +248,16 @@ class ZillowScraper:
             print(f"   Batch size: {batch_size} agents")
             print(f"   Started at: {datetime.now().strftime('%H:%M:%S')}")
 
+            # Send batch start progress
+            if self.search_input.progress_callback:
+                self.search_input.progress_callback({
+                    'stage': 'batch_start',
+                    'batch_num': batch_num,
+                    'batch_size': batch_size,
+                    'current': i,
+                    'total': total
+                })
+
             # Process this batch
             for j in range(batch_size):
                 if i >= total:
@@ -247,6 +265,16 @@ class ZillowScraper:
 
                 agent = agents_shuffled[i]  # Use shuffled list
                 print(f"   [{i+1}/{total}] Fetching: {agent.name}")
+
+                # Send agent fetch progress
+                if self.search_input.progress_callback:
+                    self.search_input.progress_callback({
+                        'stage': 'fetching_agent',
+                        'agent_name': agent.name,
+                        'current': i + 1,
+                        'total': total,
+                        'batch_num': batch_num
+                    })
 
                 try:
                     enhanced_agent = self._fetch_agent_profile(agent)
@@ -264,6 +292,16 @@ class ZillowScraper:
                 if i < total:
                     delay = random.uniform(DELAY_MIN, DELAY_MAX)
                     print(f"      ⏱️  Random delay: {delay:.1f}s")
+
+                    # Send delay progress
+                    if self.search_input.progress_callback:
+                        self.search_input.progress_callback({
+                            'stage': 'delay',
+                            'delay_seconds': delay,
+                            'current': i,
+                            'total': total
+                        })
+
                     time.sleep(delay)
 
             # Stats for this batch
@@ -285,7 +323,40 @@ class ZillowScraper:
                 print(f"      Remaining: {total - i} agents")
                 print(f"      Progress: {(i/total)*100:.1f}%")
 
-                time.sleep(break_seconds)
+                # Send break start progress
+                if self.search_input.progress_callback:
+                    self.search_input.progress_callback({
+                        'stage': 'break_start',
+                        'break_minutes': break_minutes,
+                        'break_seconds': break_seconds,
+                        'resume_time': resume_time.strftime('%H:%M:%S'),
+                        'current': i,
+                        'total': total,
+                        'progress_percent': (i/total)*100,
+                        'batch_num': batch_num
+                    })
+
+                # Sleep in smaller chunks to allow for progress updates
+                chunk_size = 10  # Update every 10 seconds
+                remaining_seconds = break_seconds
+                while remaining_seconds > 0:
+                    sleep_time = min(chunk_size, remaining_seconds)
+                    time.sleep(sleep_time)
+                    remaining_seconds -= sleep_time
+
+                    # Send break progress update
+                    if remaining_seconds > 0 and self.search_input.progress_callback:
+                        self.search_input.progress_callback({
+                            'stage': 'break_progress',
+                            'break_minutes': break_minutes,
+                            'remaining_seconds': remaining_seconds,
+                            'elapsed_seconds': break_seconds - remaining_seconds,
+                            'resume_time': resume_time.strftime('%H:%M:%S'),
+                            'current': i,
+                            'total': total,
+                            'batch_num': batch_num
+                        })
+
                 batch_num += 1
 
         print(f"\n{'='*80}")
@@ -295,6 +366,15 @@ class ZillowScraper:
         print(f"   With phone: {sum(1 for a in enhanced_agents_dict.values() if a.phone)}/{len(enhanced_agents_dict)}")
         print(f"   With email: {sum(1 for a in enhanced_agents_dict.values() if a.email)}/{len(enhanced_agents_dict)}")
         print(f"{'='*80}\n")
+
+        # Send completion progress
+        if self.search_input.progress_callback:
+            self.search_input.progress_callback({
+                'stage': 'complete',
+                'total': len(enhanced_agents_dict),
+                'with_phone': sum(1 for a in enhanced_agents_dict.values() if a.phone),
+                'with_email': sum(1 for a in enhanced_agents_dict.values() if a.email)
+            })
 
         # Restore original order (important for consistent output)
         enhanced_agents = [enhanced_agents_dict[agent.agent_id] for agent in agents]

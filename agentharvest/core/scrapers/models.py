@@ -4,7 +4,7 @@ Data models for AgentHarvest - Zillow Agent Scraper
 
 from __future__ import annotations
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, Callable, Dict, Any
 from datetime import datetime
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -230,6 +230,9 @@ class SearchInput(BaseModel):
     timeout: int = Field(30, ge=1, le=300, description="Request timeout in seconds")
     # Note: delay_between_requests removed - now uses automatic intelligent batching with random delays (15-60s)
 
+    # Progress tracking
+    progress_callback: Optional[Callable[[Dict[str, Any]], None]] = Field(None, description="Callback function for progress updates")
+
     # Output
     return_type: ReturnType = Field(ReturnType.pandas, description="Output format")
 
@@ -260,3 +263,4 @@ class SearchInput(BaseModel):
 
     class Config:
         use_enum_values = True
+        arbitrary_types_allowed = True  # Allow callable types

@@ -41,18 +41,18 @@ Instead of fetching all agents at once, the system:
 
 **Example batching for 100 agents:**
 ```
-Batch 1: 12 agents → Break 27.3 minutes
-Batch 2: 8 agents  → Break 35.8 minutes
-Batch 3: 14 agents → Break 22.1 minutes
-Batch 4: 11 agents → Break 38.4 minutes
+Batch 1: 12 agents → Break 13.7 minutes
+Batch 2: 8 agents  → Break 18.2 minutes
+Batch 3: 14 agents → Break 11.4 minutes
+Batch 4: 11 agents → Break 19.1 minutes
 ... and so on
 ```
 
 ### Phase 3: Random Breaks Between Batches
 After each batch, the system takes a **random break**:
-- Minimum: 20 minutes
-- Maximum: 40 minutes
-- Examples: 23.7 min, 37.2 min, 28.4 min, 31.9 min
+- Minimum: 10 minutes
+- Maximum: 20 minutes
+- Examples: 11.3 min, 18.7 min, 14.2 min, 16.5 min
 
 **Why this is critical:**
 - Zillow tracks requests per hour
@@ -80,17 +80,17 @@ After each batch, the system takes a **random break**:
 **For 500 agents:**
 - Avg batch size: 10 agents
 - Avg delay per agent: 37.5 seconds
-- Avg break: 30 minutes
+- Avg break: 15 minutes
 - Number of batches: 50 batches
-- Total time: ~30-35 hours
+- Total time: ~15-18 hours
 - **Safe**: ✅ Yes - runs continuously without blocking
 
 **For 100 agents:**
-- Total time: ~5-7 hours
+- Total time: ~3-4 hours
 - **Safe**: ✅ Yes
 
 **For 50 agents:**
-- Total time: ~2.5-3.5 hours
+- Total time: ~1.5-2 hours
 - **Safe**: ✅ Yes
 
 ---
@@ -115,8 +115,8 @@ agents.to_csv("california_agents.csv", index=False)
 **What happens:**
 - System fetches agents in random batches (5-15 at a time)
 - Random delays (15-60s) between each profile
-- Random breaks (20-40 min) between batches
-- Total time: ~5-7 hours for 100 agents
+- Random breaks (10-20 min) between batches
+- Total time: ~3-4 hours for 100 agents
 - **Zero configuration needed** - everything automatic
 
 ### Example 2: Large Scale (500+ Agents)
@@ -133,10 +133,10 @@ agents.to_csv("florida_agents.csv", index=False)
 ```
 
 **What happens:**
-- System will run for ~30-35 hours
-- Fetches ~15-25 agents per hour
+- System will run for ~15-18 hours
+- Fetches ~25-35 agents per hour
 - Completely safe - no blocking
-- Can leave it running overnight/weekend
+- Can leave it running overnight
 
 ### Example 3: Fast Mode (No Profiles)
 ```python
@@ -180,7 +180,7 @@ streamlit run app.py
 **Automatic Safety Features (displayed):**
 - ✅ Random delays (15-60s between requests)
 - ✅ Smart batching (5-15 agents per batch)
-- ✅ Random breaks (20-40 min between batches)
+- ✅ Random breaks (10-20 min between batches)
 - ✅ No detectable patterns - runs safely 24/7
 
 **They CAN'T accidentally:**
@@ -204,8 +204,8 @@ DELAY_MIN = 15  # Minimum seconds between requests
 DELAY_MAX = 60  # Maximum seconds between requests
 BATCH_MIN = 5   # Minimum agents per batch
 BATCH_MAX = 15  # Maximum agents per batch
-BREAK_MIN = 20  # Minimum minutes between batches
-BREAK_MAX = 40  # Maximum minutes between batches
+BREAK_MIN = 10  # Minimum minutes between batches
+BREAK_MAX = 20  # Maximum minutes between batches
 ```
 
 ### Why Hardcoded?
@@ -222,13 +222,13 @@ BREAK_MAX = 40  # Maximum minutes between batches
 |---------|-----------|------------|
 | **Delay control** | User sets manually | Automatic random (15-60s) |
 | **Batch processing** | All at once | Random batches (5-15) |
-| **Breaks** | None | Random breaks (20-40 min) |
+| **Breaks** | None | Random breaks (10-20 min) |
 | **Pattern** | Detectable | Completely random |
 | **Max agents** | 50 limit in UI | 1000+ (unlimited) |
 | **User config** | Delay slider | None needed |
 | **Safety** | Manual user responsibility | Automatic built-in |
 | **Blocking risk** | Medium (with wrong settings) | Zero (with correct usage) |
-| **Speed per hour** | 100+ agents (unsafe) | 15-25 agents (safe) |
+| **Speed per hour** | 100+ agents (unsafe) | 25-35 agents (safe) |
 | **Total capacity** | Limited by blocking | Unlimited 24/7 |
 
 ---
@@ -255,8 +255,8 @@ BREAK_MAX = 40  # Maximum minutes between batches
 
 ### "It's taking too long!"
 **Answer:** That's intentional and correct.
-- 100 agents = ~5-7 hours
-- 500 agents = ~30-35 hours
+- 100 agents = ~3-4 hours
+- 500 agents = ~15-18 hours
 - Slow = safe = unlimited capacity
 - Fast = blocked = zero capacity
 
@@ -290,7 +290,7 @@ The intelligent batching system:
 - **Zero detectable patterns** - complete randomization
 
 **Trade-off:**
-- Slower per hour (~20 agents)
+- Moderate speed (~30 agents/hour)
 - But runs indefinitely
 - Total capacity much higher
 

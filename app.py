@@ -51,7 +51,7 @@ with st.sidebar.expander("⚙️ Advanced Options"):
     st.info("""
     ✅ Random delays (15-60s between requests)
     ✅ Smart batching (5-15 agents per batch)
-    ✅ Random breaks (20-40 min between batches)
+    ✅ Random breaks (10-20 min between batches)
     ✅ No detectable patterns - runs safely 24/7
     """)
     st.caption("💡 The system automatically prevents IP blocking with intelligent randomization.")
@@ -118,9 +118,77 @@ else:
 
     st.info("📋 " + " | ".join(search_params))
 
-    # Progress bar
+    # Progress tracking
     progress_bar = st.progress(0)
     status_text = st.empty()
+    detail_text = st.empty()
+    break_text = st.empty()
+
+    # Progress callback function for real-time updates
+    def update_progress(data):
+        stage = data.get('stage')
+
+        if stage == 'profile_fetch_start':
+            total = data.get('total')
+            est_min = data.get('estimated_minutes', 0)
+            status_text.info(f"🚀 Starting profile fetch for {total} agents (est: {est_min:.0f} min)")
+            progress_bar.progress(0)
+
+        elif stage == 'batch_start':
+            batch_num = data.get('batch_num')
+            batch_size = data.get('batch_size')
+            current = data.get('current')
+            total = data.get('total')
+            status_text.info(f"📦 Batch {batch_num}: Processing {batch_size} agents")
+            detail_text.text(f"Progress: {current}/{total} agents ({(current/total*100):.1f}%)")
+            progress_bar.progress(current / total)
+
+        elif stage == 'fetching_agent':
+            agent_name = data.get('agent_name')
+            current = data.get('current')
+            total = data.get('total')
+            batch_num = data.get('batch_num')
+            status_text.info(f"📦 Batch {batch_num}: Fetching agent {current}/{total}")
+            detail_text.text(f"👤 {agent_name}")
+            progress_bar.progress(current / total)
+
+        elif stage == 'delay':
+            delay = data.get('delay_seconds', 0)
+            current = data.get('current')
+            total = data.get('total')
+            detail_text.text(f"⏱️  Waiting {delay:.1f}s before next request...")
+            progress_bar.progress(current / total)
+
+        elif stage == 'break_start':
+            break_min = data.get('break_minutes', 0)
+            resume_time = data.get('resume_time')
+            current = data.get('current')
+            total = data.get('total')
+            progress_pct = data.get('progress_percent', 0)
+            status_text.warning(f"⏸️  Taking {break_min:.1f} minute break (anti-detection)")
+            detail_text.text(f"Will resume at {resume_time} • {current}/{total} agents complete ({progress_pct:.1f}%)")
+            break_text.info(f"⏰ Break in progress... Resuming at {resume_time}")
+            progress_bar.progress(current / total)
+
+        elif stage == 'break_progress':
+            remaining = data.get('remaining_seconds', 0)
+            resume_time = data.get('resume_time')
+            current = data.get('current')
+            total = data.get('total')
+            remaining_min = remaining / 60
+            status_text.warning(f"⏸️  Break: {remaining_min:.1f} minutes remaining")
+            detail_text.text(f"Will resume at {resume_time} • {current}/{total} agents complete")
+            break_text.info(f"⏰ {remaining_min:.1f} min left until resuming...")
+            progress_bar.progress(current / total)
+
+        elif stage == 'complete':
+            total = data.get('total')
+            with_phone = data.get('with_phone')
+            with_email = data.get('with_email')
+            status_text.success(f"✅ Complete! Fetched {total} agents")
+            detail_text.text(f"📞 {with_phone} with phone • 📧 {with_email} with email")
+            break_text.empty()
+            progress_bar.progress(1.0)
 
     try:
         status_text.text("Initializing search...")
@@ -131,11 +199,11 @@ else:
 
         # Run search
         if fetch_profiles:
-            # Calculate estimated time with intelligent batching
-            # Avg delay: 37.5s, Avg batch: 10 agents, Avg break: 30 min
+            # Calculate estimated time with intelligent batching (updated times)
+            # Avg delay: 37.5s, Avg batch: 10 agents, Avg break: 15 min (updated from 30)
             avg_delay = 37.5
             avg_batch = 10
-            avg_break = 30
+            avg_break = 15  # Updated to reflect new 10-20 min range
             num_batches = (limit // avg_batch) + (1 if limit % avg_batch else 0)
             estimated_minutes = (limit * avg_delay / 60) + ((num_batches - 1) * avg_break)
             status_text.text(f"Searching Zillow for agents... (estimated: {estimated_minutes:.0f} min = {estimated_minutes/60:.1f} hours)")
@@ -156,12 +224,15 @@ else:
             limit=limit,
             fetch_profiles=fetch_profiles,
             skip_scraped=skip_scraped,
+            progress_callback=update_progress if fetch_profiles else None,
         )
 
         elapsed_time = time.time() - start_time
 
         progress_bar.progress(100)
         status_text.empty()
+        detail_text.empty()
+        break_text.empty()
 
         # Display results
         if len(agents_df) == 0:

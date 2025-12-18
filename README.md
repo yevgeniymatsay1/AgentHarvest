@@ -300,8 +300,8 @@ Each agent record includes:
 **Solution:**
 - **This is normal!** The tool uses intelligent delays to avoid detection:
   - 15-60 seconds between batches
-  - 20-40 minute breaks after every 5-15 agents
-- Fetching 100 agents with full profiles can take 1-2 hours
+  - 10-20 minute breaks after every 5-15 agents
+- Fetching 100 agents with full profiles can take 3-4 hours
 - Set `limit` to a smaller number (10-20) for testing
 
 ---
@@ -399,7 +399,7 @@ AgentHarvest includes advanced anti-bot detection bypass:
 - **Random Order Fetching**: Fetches profiles in random order
 - **Warm-up Requests**: Visits homepage before scraping
 - **Accept-Language Rotation**: Simulates users from different regions
-- **Intelligent Batching**: Random delays (15-60s), breaks (20-40 min)
+- **Intelligent Batching**: Random delays (15-60s), breaks (10-20 min)
 
 All features work automatically - no configuration needed!
 
